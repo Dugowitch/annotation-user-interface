@@ -2,7 +2,7 @@ import { useEffect } from "react"
 
 // redux
 import { useAppDispatch } from "../../../redux/hooks"
-import { historyRedo, historyUndo } from "../redux/workspaceSlice"
+import { historyRedo, historyUndo, save } from "../redux/workspaceSlice"
 import { playPause, skipBy } from "../../playback/redux/playbackSlice"
 
 
@@ -42,6 +42,13 @@ export const useHotkeys = () => {
 
             case "ArrowLeft":
                 dispatch(skipBy({value: -3, changedBy: "controlsButton"}))
+                break
+
+            case "s":
+                if (e.ctrlKey){
+                    e.preventDefault()
+                    dispatch(save())
+                }
                 break
 
             default:
