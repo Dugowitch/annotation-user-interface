@@ -4,7 +4,7 @@ import { FC, Fragment, useEffect, useState } from "react";
 import { ComboboxOption } from "@reach/combobox";
 
 // types
-import { GroupTag } from "../../../features/transcript/types/Tag";
+import { GroupTag } from "../../transcript/types/Tag";
 
 
 // Adapted from https://stackoverflow.com/a/37511463 by Lewis Diamond

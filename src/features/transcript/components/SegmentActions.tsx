@@ -2,9 +2,9 @@ import { FC } from "react";
 
 // components
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { MenuButton } from "../../../components/Menu/MenuButton";
-import { MenuPopover } from "../../../components/Menu/MenuPopover";
-import { MenuItems } from "../../../components/Menu/MenuItems";
+import { MenuButton } from "../../../components/MenuButton";
+import { MenuPopover } from "../../../components/MenuPopover";
+import { MenuItems } from "../../../components/MenuItems";
 import { Menu, MenuItem } from "@reach/menu-button";
 
 // types

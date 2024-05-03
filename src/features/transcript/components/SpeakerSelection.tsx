@@ -5,9 +5,9 @@ import { Menu, MenuItem } from "@reach/menu-button";
 import SpeakerItem from "../../../components/SpeakerItem";
 
 // styles
-import { MenuPopover } from "../../../components/Menu/MenuPopover";
-import { MenuButton } from "../../../components/Menu/MenuButton";
-import { MenuItems } from "../../../components/Menu/MenuItems";
+import { MenuPopover } from "../../../components/MenuPopover";
+import { MenuButton } from "../../../components/MenuButton";
+import { MenuItems } from "../../../components/MenuItems";
 import "@reach/menu-button/styles.css";
 
 // redux

@@ -2,7 +2,7 @@ import { FC, HTMLAttributes } from "react"
 
 // components
 import Tag from "./Tag"
-import TagSelection from "../../../components/TagSelection/TagSelection"
+import TagSelection from "./TagSelection"
 
 // style
 import styled from "styled-components"

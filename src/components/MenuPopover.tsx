@@ -2,7 +2,7 @@ import { MenuPopover as BaseMenuPopover } from "@reach/menu-button";
 
 import styled, { css } from "styled-components";
 
-import Layer from "../../types/Layer";
+import Layer from "../types/Layer";
 
 
 export const MenuPopover = styled(BaseMenuPopover)<Layer>` ${({theme, $layer}) => css`
