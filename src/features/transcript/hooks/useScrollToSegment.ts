@@ -2,7 +2,7 @@ import { RefObject, useEffect, useState } from "react"
 
 // redux
 import { useSelector } from "react-redux"
-import { selectCurrentTimeValue } from "../../playback/redux/playbackSlice"
+import { selectCurrentTimeValue } from "../../player/redux/playbackSlice"
 
 
 export const useScrollToSegment = (segmentRef: RefObject<HTMLDivElement>, start: number|undefined, end: number|undefined) => {

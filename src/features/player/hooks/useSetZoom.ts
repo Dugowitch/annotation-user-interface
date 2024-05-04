@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import WaveSurfer from "wavesurfer.js"
-import { selectZoom } from "../../playback/redux/playbackSlice"
+import { selectZoom } from "../redux/playbackSlice"
 import { useSelector } from "react-redux"
 
 const useSetZoom = (wavesurfer: React.MutableRefObject<WaveSurfer | null>) => {

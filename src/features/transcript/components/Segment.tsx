@@ -16,7 +16,7 @@ import styled, { css } from "styled-components";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/hooks";
 import { deleteSegment, mergeSegment, selectSegmentByID } from "../redux/transcriptSlice";
-import { playPauseSegment, selectIsPlaying, setTime } from "../../playback/redux/playbackSlice";
+import { playPauseSegment, selectIsPlaying, setTime } from "../../player/redux/playbackSlice";
 import { selectGroupsByStartSegment, selectIsEditing, selectStartEndSegmentIDs } from "../../grouping/redux/groupingSlice";
 
 // types

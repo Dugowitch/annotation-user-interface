@@ -3,7 +3,7 @@ import { useEffect } from "react"
 // redux
 import { useAppDispatch } from "../../../redux/hooks"
 import { historyRedo, historyUndo, save } from "../redux/workspaceSlice"
-import { playPause, skipBy } from "../../playback/redux/playbackSlice"
+import { playPause, skipBy } from "../../player/redux/playbackSlice"
 
 
 export const useHotkeys = () => {

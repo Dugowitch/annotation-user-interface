@@ -12,8 +12,8 @@ import { minimapOptions, timelineOptions, wavesurferOptions } from "../config/wa
 // redux
 import { useAppDispatch } from "../../../redux/hooks";
 import { useSelector } from "react-redux";
-import { selectZoom } from "../../playback/redux/playbackSlice";
-import { setTime } from "../../playback/redux/playbackSlice";
+import { selectZoom } from "../redux/playbackSlice";
+import { setTime } from "../redux/playbackSlice";
 import { selectAudioURL, selectDuration, selectJobStatus } from "../../workspace/redux/workspaceSlice";
 
 // hooks

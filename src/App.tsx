@@ -1,8 +1,8 @@
 import { useRef } from "react"
 
 // components
-import Controls from "./features/playback/components/Controls"
-import Waveform from "./features/waveform/components/Waveform"
+import Controls from "./features/player/components/Controls"
+import Waveform from "./features/player/components/Waveform"
 import MenuBar from "./features/workspace/components/MenuBar"
 import SegmentList from "./features/transcript/components/SegmentList"
 import GroupList from "./features/grouping/components/GroupList"

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // reducers
-import playbackReducer from '../features/playback/redux/playbackSlice'
+import playbackReducer from '../features/player/redux/playbackSlice'
 import transcriptReducer from "../features/transcript/redux/transcriptSlice"
 import groupingReducer from "../features/grouping/redux/groupingSlice"
 import workspaceReducer from "../features/workspace/redux/workspaceSlice"
