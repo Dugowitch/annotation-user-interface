@@ -16,7 +16,7 @@ import Layer from "../../../types/Layer";
 // redux
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/hooks";
-import { play, pause, skipBy, setTime, selectIsPlaying, selectCurrentTimeValue } from "../redux/playbackSlice";
+import { play, pause, skipBy, setTime, selectIsPlaying, selectCurrentTimeValue, selectClosestRedionsStarts } from "../redux/playbackSlice";
 import { selectDuration } from "../../workspace/redux/workspaceSlice";
 
 // utils
@@ -47,12 +47,13 @@ const PlaybackControls : FC<Layer> = ({$layer}) => {
     const isPlaying = useSelector(selectIsPlaying)
     const length = useSelector(selectDuration)
     const currentTimeValue = useSelector(selectCurrentTimeValue)
+    const [prevStart, nextStart] = useSelector(selectClosestRedionsStarts)
     
     return (
         <PlaybackControlsContainer>
             <Button
                 $layer={$layer}
-                onClick={() => dispatch(setTime({value: 0, changedBy: "controlsButton"}))}
+                onClick={() => dispatch(setTime({value: prevStart, changedBy: "controlsButton"}))}
                 icon={<SkipPreviousRoundedIcon />}
             />
             <Button
@@ -70,7 +71,7 @@ const PlaybackControls : FC<Layer> = ({$layer}) => {
             >+3</Button>
             <Button
                 $layer={$layer}
-                onClick={() => dispatch(setTime({value: length, changedBy: "controlsButton"}))}
+                onClick={() => dispatch(setTime({value: nextStart, changedBy: "controlsButton"}))}
                 icon={<SkipNextRoundedIcon />}
             />
             <span className="currentTime">{time2FormatedString(currentTimeValue)}</span>

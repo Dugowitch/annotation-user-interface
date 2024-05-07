@@ -1,6 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../../redux/store'
+import { selectSegments } from '../../transcript/redux/transcriptSlice'
+import { selectDuration } from '../../workspace/redux/workspaceSlice'
 
 // slice state type
 interface PlaybackState {
@@ -84,5 +86,25 @@ export const selectPlayingTo = (state: RootState) => state.playback.playingTo
 export const selectSpeed = (state: RootState) => state.playback.speed
 export const selectVolume = (state: RootState) => state.playback.volume
 export const selectZoom = (state: RootState) => state.playback.zoom
+export const selectClosestRedionsStarts = createSelector(
+    [selectSegments, selectCurrentTimeValue, selectDuration],
+    (segments, currentTime, duration) => {
+        let prevStart = 0
+        let nextStart = duration
+        for (let key of segments.keys){
+            if (!segments.entities[key])
+                continue
+
+            const t = segments.entities[key].start
+            if (t < currentTime){
+                prevStart = t
+            } else if (t > currentTime){
+                nextStart = t
+                break
+            }
+        }
+        return [prevStart, nextStart]
+    }
+)
 
 export default playbackSlice.reducer
