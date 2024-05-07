@@ -102,38 +102,37 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
     
     return (<>
         <SegmentLayout
-            $layer={$layer}
+            $layer={(!groupEditing && isCursorIn) ? $layer+1 : $layer}
             className={`
                 ${className}
-                ${(segmentID === startSegmentID || segmentID === endSegmentID) ? "selected" : ""}
-                ${(!groupEditing && isCursorIn) ? "selected" : ""}`}
+                ${(segmentID === startSegmentID || segmentID === endSegmentID) ? "selected" : ""}`}
             {...props}
             ref={containerRef}
             onClick={handleSegmentClick}
         >
             <div style={{display: "flex", gap: "8px", alignItems: "center"}}>
                 <SpeakerSelection
-                    $layer={$layer+1}
+                    $layer={(!groupEditing && isCursorIn) ? $layer +2 : $layer+1}
                     segmentID={segmentID}
                     regionReloadCallback={regionsReloadCallback}
                 />
                 {time2FormatedString(data.start)} – {time2FormatedString(data.end)}
                 <SegmentActions
                     style={{marginLeft: "auto"}}
-                    $layer={$layer}
+                    $layer={(!groupEditing && isCursorIn) ? $layer+1 : $layer}
                     deleteHandler={() => dispatch(deleteSegment({id: segmentID, callback: regionsReloadCallback}))}
                     mergeHandler={() => dispatch(mergeSegment({id: segmentID, callback: regionsReloadCallback}))}
                 />
             </div>
             <div style={{display: "flex"}}>
                 <Button
-                    $layer={$layer}
+                    $layer={(!groupEditing && isCursorIn) ? $layer+1 : $layer}
                     onClick={handlePlayPause}
                     icon={isPlaying ? <PauseRoundedIcon /> : <PlayArrowRoundedIcon />}
                 />
                 <SegmentText
                     segmentID={segmentID}
-                    $layer={$layer}
+                    $layer={(!groupEditing && isCursorIn) ? $layer+1 : $layer}
                     onClick={e => e.stopPropagation()}
                 />
             </div>

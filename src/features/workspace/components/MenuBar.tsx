@@ -74,21 +74,13 @@ const MenuBar : FC<React.HTMLAttributes<HTMLDivElement> & Layer> = ({$layer, ...
             <h1>{title}</h1>
             <MenuItemsContainer>
                 <Button $layer={$layer} onClick={handleNavigateToCatalogue}>Zpět do karty</Button>
-                <Menu>
-                    <MenuButton $layer={$layer}>Soubor</MenuButton>
-                    <MenuPopover $layer={$layer+1}>
-                        <MenuItems $layer={$layer+1}>
-                            <MenuItem onSelect={() => dispatch(save())}>Uložit</MenuItem> {/* Ctrl+S */}
-                            <MenuItem onSelect={() => {/*TODO*/}}>Hotovo</MenuItem>
-                        </MenuItems>
-                    </MenuPopover>
-                </Menu>
+                <Button $layer={$layer} onClick={() => dispatch(save())}>Uložit</Button>
                 <Menu>
                     <MenuButton $layer={$layer}>Úpravy</MenuButton>
                     <MenuPopover $layer={$layer+1}>
                         <MenuItems $layer={$layer+1}>
-                            <MenuItem onSelect={() => dispatch(historyUndo())}>Zpět</MenuItem> {/* Ctrl+Z */}
-                            <MenuItem onSelect={() => dispatch(historyRedo())}>Navrátit</MenuItem> {/* Ctrl+Shift+Z, Ctrl+Y */}
+                            <MenuItem onSelect={() => dispatch(historyUndo())}>Krok zpět</MenuItem> {/* Ctrl+Z */}
+                            <MenuItem onSelect={() => dispatch(historyRedo())}>Krok napřed</MenuItem> {/* Ctrl+Shift+Z, Ctrl+Y */}
                         </MenuItems>
                     </MenuPopover>
                 </Menu>
@@ -97,8 +89,8 @@ const MenuBar : FC<React.HTMLAttributes<HTMLDivElement> & Layer> = ({$layer, ...
                     <MenuButton $layer={$layer}>Nápověda</MenuButton>
                     <MenuPopover $layer={$layer+1}>
                         <MenuItems $layer={$layer+1}>
-                            <MenuItem onSelect={() => {/*TODO*/}}>Příručka pro anotaci</MenuItem>
-                            <MenuItem onSelect={() => {/*TODO*/}}>Some Other Manual</MenuItem> {/* TODO: load from job */}
+                            <MenuItem onSelect={() => {/*TODO*/}}>Klávesové zkratky</MenuItem>
+                            <MenuItem onSelect={() => {/*TODO*/}}>Videomanuál</MenuItem>
                         </MenuItems>
                     </MenuPopover>
                 </Menu>

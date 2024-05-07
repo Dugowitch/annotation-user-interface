@@ -34,6 +34,7 @@ const useLoadRegions = (wavesurfer: React.MutableRefObject<WaveSurfer | null>,
                     start: segment.start,
                     end: segment.end,
                     drag: false,
+                    minLength: 0.1,
                     color: rgba(speaker2color[segment.speaker] || "#c6c6c6", 0.4)
                 })
                 dispatch(mapRegion2Segment({segmentID: key, regionID: region.id}))
@@ -42,14 +43,17 @@ const useLoadRegions = (wavesurfer: React.MutableRefObject<WaveSurfer | null>,
 
         const subscriptions = [
             waveformRegionsRef.current.on('region-created', (region) => {
+                const regionEnd = (region.end - region.start < 0.1) ? region.start + 0.1 : region.end
                 region.setOptions({
                     start: region.start,
+                    drag: false,
+                    end: regionEnd,
                     color: rgba(speaker2color["A"] || "#c6c6c6", 0.4),
                 })
                 dispatch(createSegment({
                     regionID: region.id,
                     start: region.start,
-                    end: region.end
+                    end: regionEnd,
                 }))
             }),
             waveformRegionsRef.current.on('region-updated', (region) => {

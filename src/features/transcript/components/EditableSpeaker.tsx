@@ -72,6 +72,7 @@ const EditableSpeaker: FC<EditableSpeakerProps> = ({speaker, $layer}) => {
                 ref={inputRef}
                 $layer={$layer}
                 value={label}
+                placeholder="Nový mluvčí..."
                 onChange={e => setLabel(e.target.value)}
                 onBlur={handleSpeakerUpdate}
                 onKeyDown={handleEnter}

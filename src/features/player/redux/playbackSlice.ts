@@ -69,7 +69,7 @@ export const playbackSlice = createSlice({
             state.zoom /= 2
         },
         zoomIn: (state) => {
-            if (state.zoom > 64) return
+            if (state.zoom > 129) return
             state.zoom *= 2
         }
     },
