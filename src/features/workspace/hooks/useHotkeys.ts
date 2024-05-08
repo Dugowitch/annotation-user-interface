@@ -3,11 +3,13 @@ import { useEffect } from "react"
 // redux
 import { useAppDispatch } from "../../../redux/hooks"
 import { historyRedo, historyUndo, save } from "../redux/workspaceSlice"
-import { playPause, skipBy } from "../../player/redux/playbackSlice"
+import { playPause, selectClosestRedionsStarts, setTime, skipBy } from "../../player/redux/playbackSlice"
+import { useSelector } from "react-redux"
 
 
 export const useHotkeys = () => {
     const dispatch = useAppDispatch()
+    const [prevStart, nextStart] = useSelector(selectClosestRedionsStarts)
 
     const handleHotkeys = (e: KeyboardEvent) => {
         switch (e.key) {
@@ -37,11 +39,19 @@ export const useHotkeys = () => {
                 break
 
             case "ArrowRight":
-                dispatch(skipBy({value: 3, changedBy: "controlsButton"}))
+                if (e.shiftKey){
+                    dispatch(setTime({value: nextStart, changedBy: "controlsButton"}))
+                } else {
+                    dispatch(skipBy({value: 3, changedBy: "controlsButton"}))
+                }
                 break
 
             case "ArrowLeft":
-                dispatch(skipBy({value: -3, changedBy: "controlsButton"}))
+                if (e.shiftKey){
+                    dispatch(setTime({value: prevStart, changedBy: "controlsButton"}))
+                } else {
+                    dispatch(skipBy({value: -3, changedBy: "controlsButton"}))
+                }
                 break
 
             case "s":
