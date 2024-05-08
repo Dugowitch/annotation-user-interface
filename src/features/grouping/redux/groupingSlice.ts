@@ -9,6 +9,8 @@ import { Group } from "../types/Group"
 
 // utils
 import { v4 as uuid } from 'uuid'
+import { removeGroupFromLookup } from "../utils/removeGroupFromMapping"
+import { addGroupToSegmentMapping, removeGroupFromSegmentMapping } from "../utils/segment2GroupManipulations"
 
 
 const initialState: GroupingState = {
@@ -66,39 +68,12 @@ export const groupingSlice = createSlice({
 
             // add new records to {start|end}Segment2Group
             const {startSegmentID, endSegmentID} = action.payload
-            if (!state.startSegment2Group[startSegmentID]){
-                state.startSegment2Group[startSegmentID] = [id]
-            }
-            if (!state.startSegment2Group[startSegmentID].includes(id)){
-                state.startSegment2Group[startSegmentID].push(id)
-            }
-            if (!state.endSegment2Group[endSegmentID]){
-                state.endSegment2Group[endSegmentID] = [id]
-            }
-            if (!state.endSegment2Group[endSegmentID].includes(id)){
-                state.endSegment2Group[endSegmentID].push(id)
-            }
+            addGroupToSegmentMapping(state.startSegment2Group, startSegmentID, id)
+            addGroupToSegmentMapping(state.endSegment2Group, endSegmentID, id)
         },
         deleteGroup: (state, action: PayloadAction<{id: string, parentID?: string}>) => {
             const {id, parentID} = action.payload
-
-            // remove reference from parent or top level groupID list
-            if (parentID){
-                const parent = state.groups.entities[parentID]
-                const idx = parent.childrenIDs.findIndex(childID => childID === id)
-                parent.childrenIDs.splice(idx, 1)
-            } else {
-                const idx = state.groups.keys.findIndex(groupID => groupID === id)
-                state.groups.keys.splice(idx, 1)
-            }
-            
-            // cascade delete
-            const toDelete: string[] = [id]
-            for (let i = 0; i < toDelete.length; i++){
-                const group = state.groups.entities[toDelete[i]]
-                toDelete.concat(group.childrenIDs)
-            }
-            toDelete.forEach(deleteID => delete state.groups.entities[deleteID])
+            removeGroupFromLookup(state.groups, id, parentID)
         },
         beginSelecting: (state, action: PayloadAction<"start"|"end"|null>) => {
             state.selecting = action.payload
@@ -148,11 +123,54 @@ export const groupingSlice = createSlice({
             state.parentSegmentIDs.start = ""
             state.parentSegmentIDs.end = ""
         },
+        updateGroupSegmentReferences: (state, action: PayloadAction<{segmentID: string, segmentKeys: string[], isMerge?: boolean}>) => {
+            const {segmentID, segmentKeys, isMerge} = action.payload
+            let starts = state.startSegment2Group[segmentID] // groupIDs where the segment is the start segment
+            let ends = state.endSegment2Group[segmentID] // groupIDs where the segment is the end segment
+            if (!starts && !ends)
+                return
+            
+            const idx = segmentKeys.findIndex(key => key === segmentID)
+            if (idx === -1)
+                return
+            
+            starts = starts ? [...starts] : []
+            for (let start of starts){
+                removeGroupFromSegmentMapping(state.startSegment2Group, segmentID, start)
+                if (idx < segmentKeys.length - 1 && !ends?.includes(start)){ // use next segment as start
+                    const nextSegmentID = segmentKeys[idx+1]
+                    state.groups.entities[start].startSegmentID = nextSegmentID
+                    addGroupToSegmentMapping(state.startSegment2Group, nextSegmentID, start)
+                } else { // delete single segment group
+                    removeGroupFromSegmentMapping(state.endSegment2Group, segmentID, start)
+                    removeGroupFromLookup(state.groups, start)
+                }
+            }
+            
+            ends = ends ? [...ends] : []
+            ends.forEach(end => {
+                removeGroupFromSegmentMapping(state.endSegment2Group, segmentID, end)
+                if(isMerge && idx < segmentKeys.length - 1){ // use next segment as end
+                    const nextSegmentID = segmentKeys[idx+1]
+                    state.groups.entities[end].endSegmentID = nextSegmentID
+                    addGroupToSegmentMapping(state.endSegment2Group, nextSegmentID, end)
+                }
+                else if (idx > 0){ // use prev segment as end
+                    const prevSegmentID = segmentKeys[idx-1]
+                    if (state.groups.entities[end]){
+                        state.groups.entities[end].endSegmentID = prevSegmentID
+                        addGroupToSegmentMapping(state.endSegment2Group, prevSegmentID, end)
+                    }
+                } else { // remove group
+                    removeGroupFromLookup(state.groups, end)
+                }
+            })
+        },
     },
 })
 
 export const { loadGroups, createOrUpdateGroup, deleteGroup, beginSelecting, chooseSegment,
-            resetSelecting, startEditing, endEditing, setGroupingFromHistory } = groupingSlice.actions
+            resetSelecting, startEditing, endEditing, setGroupingFromHistory, updateGroupSegmentReferences } = groupingSlice.actions
 
 export const selectGroups = (state: RootState) => state.grouping.groups
 export const selectGroupIDs = (state: RootState) => state.grouping.groups.keys

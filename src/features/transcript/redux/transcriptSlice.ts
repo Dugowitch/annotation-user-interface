@@ -83,25 +83,22 @@ export const transcriptSlice = createSlice({
                 )
             }
         },
-        deleteSegment: (state, action: PayloadAction<{id: string, callback: () => void}>) => {
-            const idx = state.segments.keys.findIndex(key => key === action.payload.id)
+        deleteSegment: (state, action: PayloadAction<string>) => {
+            const segmentID = action.payload 
+            const idx = state.segments.keys.findIndex(key => key === segmentID)
             if (idx >= 0 && idx < state.segments.keys.length){
                 state.segments.keys.splice(idx, 1)
             }
 
-            let regionID = segment2RegionID(state.region2ID, action.payload.id)
-            delete state.segments.entities[action.payload.id]
+            let regionID = segment2RegionID(state.region2ID, segmentID)
+            delete state.segments.entities[segmentID]
             if (regionID){                
                 // delete regionID from id lookup
                 delete state.region2ID[regionID]
             }
-
-            // reload waveform regions
-            // WARNING: the callbacks must not update the redux state!
-            action.payload.callback()
         },
-        mergeSegment: (state, action: PayloadAction<{id: string, callback: () => void}>) => {
-            const {id, callback} = action.payload
+        mergeSegment: (state, action: PayloadAction<string>) => {
+            const id = action.payload
             const keys = state.segments.keys
             const idx = keys.findIndex(key => key === id)
 
@@ -113,7 +110,7 @@ export const transcriptSlice = createSlice({
             next.start = current.start
             next.words = current.words + " " + next.words
             
-            let regionID = segment2RegionID(state.region2ID, action.payload.id)
+            let regionID = segment2RegionID(state.region2ID, id)
             keys.splice(idx, 1)
             delete state.segments.entities[id]
 
@@ -121,10 +118,6 @@ export const transcriptSlice = createSlice({
                 // delete regionID from id lookup
                 delete state.region2ID[regionID]
             }
-
-            // reload waveform regions
-            // WARNING: the callbacks must not update the redux state!
-            callback()
         },
         mapRegion2Segment: (state, action: PayloadAction<{segmentID: string, regionID: string}>) => {
             state.region2ID[action.payload.regionID] = action.payload.segmentID

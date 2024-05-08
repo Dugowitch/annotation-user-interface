@@ -15,9 +15,9 @@ import styled, { css } from "styled-components";
 // redux
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/hooks";
-import { deleteSegment, mergeSegment, selectSegmentByID } from "../redux/transcriptSlice";
+import { deleteSegment, mergeSegment, selectSegmentByID, selectSegmentIDs } from "../redux/transcriptSlice";
 import { playPauseSegment, selectIsPlaying, setTime } from "../../player/redux/playbackSlice";
-import { selectGroupsByStartSegment, selectIsEditing, selectStartEndSegmentIDs } from "../../grouping/redux/groupingSlice";
+import { selectGroupsByStartSegment, selectIsEditing, selectStartEndSegmentIDs, updateGroupSegmentReferences } from "../../grouping/redux/groupingSlice";
 
 // types
 import type Layer from "../../../types/Layer"
@@ -74,6 +74,7 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
     const {start: startSegmentID, end: endSegmentID} = useSelector(selectStartEndSegmentIDs)
     const memberGroupIDs = useSelector((state: RootState) => selectGroupsByStartSegment(state)(segmentID))
     const groupEditing = useSelector(selectIsEditing)
+    const segmentIDs = useSelector(selectSegmentIDs)
     
     const containerRef = useRef<HTMLDivElement>(null)
     const isCursorIn = useScrollToSegment(containerRef, segmentID)
@@ -98,9 +99,15 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
     }
 
     const handleDelete = () => {
-        // dispatch(skipHistoryPush())
-        // dispatch(updateGroupSegmentReferences({segmentID: segmentID, keys: segmentIDs})) // TODO
-        dispatch(deleteSegment({id: segmentID, callback: regionsReloadCallback}))
+        dispatch(updateGroupSegmentReferences({segmentID: segmentID, segmentKeys: segmentIDs}))
+        regionsReloadCallback()
+        dispatch(deleteSegment(segmentID))
+    }
+    
+    const handleMerge = () => {
+        dispatch(updateGroupSegmentReferences({segmentID: segmentID, segmentKeys: segmentIDs, isMerge: true}))
+        regionsReloadCallback()
+        dispatch(mergeSegment(segmentID))
     }
 
     if (!data)
@@ -127,7 +134,7 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
                     style={{marginLeft: "auto"}}
                     $layer={(!groupEditing && isCursorIn) ? $layer+1 : $layer}
                     deleteHandler={handleDelete}
-                    mergeHandler={() => dispatch(mergeSegment({id: segmentID, callback: regionsReloadCallback}))}
+                    mergeHandler={handleMerge}
                 />
             </div>
             <div style={{display: "flex"}}>
