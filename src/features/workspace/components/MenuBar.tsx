@@ -20,6 +20,7 @@ import { historyRedo, historyUndo } from "../redux/workspaceSlice"
 
 // types
 import Layer from "../../../types/Layer"
+import HotkeyList from "./HotkeyList"
 
 
 const MenuBarContainer = styled.nav<Layer>`
@@ -96,7 +97,10 @@ const MenuBar : FC<React.HTMLAttributes<HTMLDivElement> & Layer> = ({$layer, ...
                     <MenuButton $layer={$layer}>Nápověda</MenuButton>
                     <MenuPopover $layer={$layer+1}>
                         <MenuItems $layer={$layer+1}>
-                            <MenuItem onSelect={() => {/*TODO*/}}>Klávesové zkratky</MenuItem>
+                            <MenuItem onSelect={() => setShowHotkeys(true)}>Klávesové zkratky</MenuItem>
+                            <Dialog isOpen={showHotkeys} onDismiss={() => setShowHotkeys(false)}>
+                                <HotkeyList $layer={$layer} closeCallback={() => setShowHotkeys(false)}/>
+                            </Dialog>
                             <MenuItem onSelect={() => {/*TODO*/}}>Videomanuál</MenuItem>
                         </MenuItems>
                     </MenuPopover>
