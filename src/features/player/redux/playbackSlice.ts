@@ -86,16 +86,36 @@ export const selectPlayingTo = (state: RootState) => state.playback.playingTo
 export const selectSpeed = (state: RootState) => state.playback.speed
 export const selectVolume = (state: RootState) => state.playback.volume
 export const selectZoom = (state: RootState) => state.playback.zoom
+export const selectCurrentlyPlayingSegmentID = createSelector(
+    [selectCurrentTimeValue, selectSegments],
+    (time, segments) => {
+        for (let key of segments.keys){
+            const segment = segments.entities[key]
+            if (!segment)
+                continue
+
+            if (segment.start < time && segment.end > time){
+                return key
+            } else if (segment.start > time){
+                break
+            } else if (segment.end < time){
+                continue
+            }
+        }
+        return undefined
+    }
+)
 export const selectClosestRedionsStarts = createSelector(
     [selectSegments, selectCurrentTimeValue, selectDuration],
     (segments, currentTime, duration) => {
         let prevStart = 0
         let nextStart = duration
         for (let key of segments.keys){
-            if (!segments.entities[key])
+            const segment = segments.entities[key]
+            if (!segment)
                 continue
 
-            const t = segments.entities[key].start
+            const t = segment.start
             if (t < currentTime){
                 prevStart = t
             } else if (t > currentTime){

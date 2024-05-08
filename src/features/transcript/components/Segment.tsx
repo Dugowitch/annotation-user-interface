@@ -76,7 +76,7 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
     const groupEditing = useSelector(selectIsEditing)
     
     const containerRef = useRef<HTMLDivElement>(null)
-    const isCursorIn = useScrollToSegment(containerRef, data.start, data.end)
+    const isCursorIn = useScrollToSegment(containerRef, segmentID)
 
     useEffect(() => {
         if (!isAudioPlaying && isPlaying)
@@ -95,6 +95,12 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
         if (groupEditing)
             return
         dispatch(setTime({value: data.start, changedBy: "segment"}))
+    }
+
+    const handleDelete = () => {
+        // dispatch(skipHistoryPush())
+        // dispatch(updateGroupSegmentReferences({segmentID: segmentID, keys: segmentIDs})) // TODO
+        dispatch(deleteSegment({id: segmentID, callback: regionsReloadCallback}))
     }
 
     if (!data)
@@ -120,7 +126,7 @@ const Segment: FC<SegmentProps> = ({segmentID, $layer, regionsReloadCallback, cl
                 <SegmentActions
                     style={{marginLeft: "auto"}}
                     $layer={(!groupEditing && isCursorIn) ? $layer+1 : $layer}
-                    deleteHandler={() => dispatch(deleteSegment({id: segmentID, callback: regionsReloadCallback}))}
+                    deleteHandler={handleDelete}
                     mergeHandler={() => dispatch(mergeSegment({id: segmentID, callback: regionsReloadCallback}))}
                 />
             </div>

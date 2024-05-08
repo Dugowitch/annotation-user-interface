@@ -2,15 +2,15 @@ import { RefObject, useEffect, useState } from "react"
 
 // redux
 import { useSelector } from "react-redux"
-import { selectCurrentTimeValue } from "../../player/redux/playbackSlice"
+import { selectCurrentlyPlayingSegmentID } from "../../player/redux/playbackSlice"
 
 
-export const useScrollToSegment = (segmentRef: RefObject<HTMLDivElement>, start: number|undefined, end: number|undefined) => {
+export const useScrollToSegment = (segmentRef: RefObject<HTMLDivElement>, segmentID: string) => {
     const [inside, setInside] = useState(false)
-    const currentTime = useSelector(selectCurrentTimeValue)
+    const playingSegmentID = useSelector(selectCurrentlyPlayingSegmentID)
 
     useEffect(() => {
-        if (!start || !end || currentTime < start || currentTime >= end){
+        if (!playingSegmentID || playingSegmentID !== segmentID){
             setInside(false)
             return
         }
@@ -20,7 +20,7 @@ export const useScrollToSegment = (segmentRef: RefObject<HTMLDivElement>, start:
             behavior: "smooth",
             top: segmentRef.current.offsetTop - segmentRef.current.parentElement.offsetTop - segmentRef.current.parentElement.clientHeight/3,
         })
-    }, [segmentRef, currentTime, start, end])
+    }, [segmentRef, playingSegmentID, segmentID])
 
     return inside
 }
