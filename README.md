@@ -10,6 +10,7 @@ install dependencies (only the first time)
 ```
 yarn -i
 ```
+insert your `API_KEY` to the `app.config.ts` file
 
 run dev server
 ```
