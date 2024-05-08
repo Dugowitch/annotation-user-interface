@@ -126,11 +126,7 @@ const GroupForm: FC<GroupFormProps> = ({$layer, groupID, parentID, parentTags, s
         setPublish(group.publish)
         setTags(group.tags)
     }, [group])
-
-    // useEffect(() => {
-    //     // TODO: on parentTag change, remove tags that might have been added and would be duplicate
-    // }, [parentTags])
-
+    
     const resetState = () => {
         setTitle("")
         setError("")

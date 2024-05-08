@@ -36,8 +36,11 @@ export const groupingSlice = createSlice({
     name: "groups",
     initialState,
     reducers: {
-        loadGroups: (state, action: PayloadAction<Lookup<Group>>) => {
-            state.groups = action.payload
+        loadGroups: (state, action: PayloadAction<{transformedGroups: Lookup<Group>, startSegment2Group: Record<string, string[]>, endSegment2Group: Record<string, string[]>}>) => {
+            const { transformedGroups, startSegment2Group, endSegment2Group } = action.payload
+            state.groups = transformedGroups
+            state.startSegment2Group = startSegment2Group
+            state.endSegment2Group = endSegment2Group
         },
         createOrUpdateGroup: (state, action: PayloadAction<GroupCreationPayload>) => {
             // remove old records from {start|end}Segment2Group if {start|end}SegmentID changed

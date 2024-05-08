@@ -5,11 +5,12 @@ import { Segment } from "../../transcript/types/Segment";
 
 // utils
 import { v4 as uuid } from 'uuid'
+import { addGroupToSegmentMapping } from "./segment2GroupManipulations";
 
 
 const time2SegmentID = (time: number, segments: Lookup<Segment>, type: "start"|"end"): string => {
     const segmentID = segments.keys.find(key => {
-        segments.entities[key][type] === time // FIXME: float comparison
+        segments.entities[key][type] - time < 0.05
     })
 
     if (!segmentID)
@@ -41,13 +42,19 @@ const adaptGroupArr = (groupArr: GroupLoadingParams[], entities: Record<string, 
     return IDs
 }
 
-export const adaptGroups = (groups: GroupLoadingParams[]|null|undefined, segments: Lookup<Segment>): Lookup<Group> => {
+export const adaptGroups = (groups: GroupLoadingParams[]|null|undefined, segments: Lookup<Segment>) => {
     const transformedGroups: Lookup<Group> = { keys: [], entities: {}, }
     if (!groups)   
-        return transformedGroups
+        return {transformedGroups: transformedGroups, startSegment2Group: {}, endSegment2Group: {}}
 
     transformedGroups.keys = adaptGroupArr(groups, transformedGroups.entities, segments, undefined)
 
-    // TODO: {start|end}Segment2Group
-    return transformedGroups
+    const startSegment2Group: Record<string, string[]> = {}
+    const endSegment2Group: Record<string, string[]> = {}
+    for (let groupID in transformedGroups.entities){
+        const group = transformedGroups.entities[groupID]
+        addGroupToSegmentMapping(startSegment2Group, group.startSegmentID, groupID)
+        addGroupToSegmentMapping(endSegment2Group, group.endSegmentID, groupID)
+    }
+    return {transformedGroups: transformedGroups, startSegment2Group: startSegment2Group, endSegment2Group: endSegment2Group}
 }

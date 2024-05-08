@@ -17,8 +17,8 @@ export const useLoadGroups = () => {
         if (status !== "success")
             return
 
-        const transformedGroups = adaptGroups(groups, segments)
-        dispatch(loadGroups(transformedGroups))
+        const trasnformedData = adaptGroups(groups, segments)
+        dispatch(loadGroups(trasnformedData))
         dispatch(enableHistory())
     }, [status])
 }

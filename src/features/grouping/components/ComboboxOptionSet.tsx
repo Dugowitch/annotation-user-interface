@@ -35,9 +35,6 @@ const ComboboxOptionSet: FC<ComboboxOptionSetProps> = ({term, options, onSelecti
         }))
     }, [options, term])
 
-    // FIXME: search: "aa" -> search: "b" -> search: "z" -> app drops with VVV error in <ComboboxOptionSet>
-    // Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-
     if (!options)
         return null
 
