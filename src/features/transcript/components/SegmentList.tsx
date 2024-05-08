@@ -11,7 +11,8 @@ import { scrollableBaseStyles } from "../../../style/scrollableBaseStyles"
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/hooks";
 import { selectSelecting, chooseSegment } from "../../grouping/redux/groupingSlice";
-import { selectSegmentIDs } from "../redux/transcriptSlice"
+import { selectSegmentIDs, selectTranscriptError } from "../redux/transcriptSlice"
+import { selectJobError } from "../../workspace/redux/workspaceSlice";
 
 // types
 import Layer from "../../../types/Layer"
@@ -45,7 +46,17 @@ const SegmentList: FC<SegmentLayoutProps> = ({waveformRegionsRef, $layer, ...pro
     const selecting = useSelector(selectSelecting)
     const [hoverID, setHoverID] = useState<string>("")
     const [selectionStartIdx, selectionEndIdx] = useSelectingStartEnd(segmentIDs, hoverID)
-    
+    const jobError = useSelector(selectJobError)
+    const transcriptError = useSelector(selectTranscriptError)
+
+    if (jobError || transcriptError){
+        return (
+            <SegmentLayout  $layer={$layer}>
+                <p>{jobError?.code || transcriptError?.code || "Error"}: {jobError?.message || transcriptError?.message || "unknown error"}</p>
+            </SegmentLayout>
+        )
+    }
+
     return (
         <SegmentLayout $layer={$layer} {...props} onMouseLeave={() => setHoverID("")}>
             {segmentIDs.map((id, i) =>

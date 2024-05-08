@@ -13,6 +13,7 @@ import type { SegmentUpdatePayload, SegmentCreationPayload } from '../types/Segm
 import { Segment } from '../types/Segment'
 import { SpeakerTag } from '../types/Tag'
 import { Lookup } from '../../../types/Lookup'
+import { APIErrorResponse } from '../../../types/APIErrorResponse'
 
 // utils
 import { v4 as uuid } from 'uuid'
@@ -27,6 +28,7 @@ export const fetchTranscript = createFetchAsyncThunk<TranscriptLoadingParams>("t
 const initialState: Transcript = {
     id: "",
     status: "idle",
+    error: undefined,
     source: "",
     created_at: "",
     specialChar: "",
@@ -189,9 +191,9 @@ export const transcriptSlice = createSlice({
             const transformedSegments = adaptSegments(segments)
             const transformedTags = adaptSpeakers(speaker_tags)
             return {...state, status: "success", ...transcriptCommon, segments: transformedSegments, speakerTags: transformedTags}
-        }).addCase(fetchTranscript.rejected, (state, _) => {
+        }).addCase(fetchTranscript.rejected, (state, action) => {
             state.status = "error"
-            // TODO: handle error message
+            state.error = action.payload as APIErrorResponse
         })
     }
 })
@@ -206,6 +208,7 @@ export const selectSpecialChar = (state: RootState) => state.transcript.specialC
 export const selectLastFocusedSegment = (state: RootState) => state.transcript.lastFocusedSegment
 export const selectSpeakers = (state: RootState) => state.transcript.speakerTags
 export const selectGroupsRaw = (state: RootState) => state.transcript.groups
+export const selectTranscriptError = (state: RootState) => state.transcript.error
 const selectSegmentKeys = (state: RootState) => state.transcript.segments.keys
 const selectSegmentEntities = (state: RootState) => state.transcript.segments.entities
 export const selectSegmentIDs = createSelector(

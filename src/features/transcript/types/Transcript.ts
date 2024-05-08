@@ -3,6 +3,7 @@ import { SegmentTag, TextTag } from "./Tag";
 import { Segment, SegmentLoadingParams } from "./Segment";
 import { Lookup } from "../../../types/Lookup";
 import { GroupLoadingParams } from "../../grouping/types/Group";
+import { APIErrorResponse } from "../../../types/APIErrorResponse";
 
 
 interface TranscriptCommon {
@@ -26,4 +27,5 @@ export interface Transcript extends TranscriptCommon {
     region2ID: Record<string, string>,
     specialChar: string,
     lastFocusedSegment: string,
+    error?: APIErrorResponse,
 }

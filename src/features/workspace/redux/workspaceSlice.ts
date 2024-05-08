@@ -119,6 +119,7 @@ export const selectGroupTags = (state: RootState) => state.workspace.groupTags
 export const selectTitle = (state: RootState) => state.workspace.title
 export const selectAudioURL = (state: RootState) => state.workspace.url.mp3
 export const selectWaveformURL = (state: RootState) => state.workspace.url.waveform_data
+export const selectJobError = (state: RootState) => state.workspace.error
 export const selectHistory = createSelector(
     [(state: RootState) => state.workspace.history],
     (history) => history.snapshots[history.pointer]
