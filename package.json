@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.14.13",
     "@mui/material": "^5.15.14",
     "@reach/combobox": "^0.18.0",
+    "@reach/dialog": "^0.18.0",
     "@reach/menu-button": "^0.18.0",
     "@reach/slider": "^0.18.0",
     "@reduxjs/toolkit": "^1.9.7",

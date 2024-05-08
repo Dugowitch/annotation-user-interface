@@ -9,5 +9,9 @@
 }
 
 [data-reach-popover]{
+  z-index: 998;
+}
+
+[data-reach-dialog-overlay] {
   z-index: 999;
 }

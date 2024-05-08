@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useState } from "react"
 
 // components
 import { Menu, MenuItem } from "@reach/menu-button"
@@ -6,6 +6,8 @@ import { MenuPopover } from "../../../components/MenuPopover"
 import { MenuButton } from "../../../components/MenuButton"
 import { MenuItems } from "../../../components/MenuItems"
 import Button from "../../../components/Button"
+import Dialog from "../../../components/Dialog"
+import Settings from "./Settings"
 
 // style
 import styled from "styled-components"
@@ -61,6 +63,8 @@ const MenuItemsContainer = styled.div`
 const MenuBar : FC<React.HTMLAttributes<HTMLDivElement> & Layer> = ({$layer, ...props}) => {
     const title = useSelector(selectTitle)
     const dispatch = useAppDispatch()
+    const [showSettings, setShowSettings] = useState(false)
+    const [showHotkeys, setShowHotkeys] = useState(false)
 
     const handleNavigateToCatalogue = () => {
         const URL = "https://data.jamap.cz/cards/show-all"
@@ -84,7 +88,10 @@ const MenuBar : FC<React.HTMLAttributes<HTMLDivElement> & Layer> = ({$layer, ...
                         </MenuItems>
                     </MenuPopover>
                 </Menu>
-                <Button $layer={$layer} onClick={() => {/*TODO*/}}>Nastavení</Button>
+                <Button $layer={$layer} onClick={() => {setShowSettings(true)}}>Nastavení</Button>
+                <Dialog isOpen={showSettings} onDismiss={() => setShowSettings(false)}>
+                    <Settings $layer={$layer} closeCallback={() => setShowSettings(false)} />
+                </Dialog>
                 <Menu>
                     <MenuButton $layer={$layer}>Nápověda</MenuButton>
                     <MenuPopover $layer={$layer+1}>

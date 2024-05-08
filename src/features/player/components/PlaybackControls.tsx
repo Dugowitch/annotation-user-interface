@@ -16,7 +16,7 @@ import Layer from "../../../types/Layer";
 // redux
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../redux/hooks";
-import { play, pause, skipBy, setTime, selectIsPlaying, selectCurrentTimeValue, selectClosestRedionsStarts } from "../redux/playbackSlice";
+import { play, pause, skipBy, setTime, selectIsPlaying, selectCurrentTimeValue, selectClosestRedionsStarts, selectSkipLength } from "../redux/playbackSlice";
 import { selectDuration } from "../../workspace/redux/workspaceSlice";
 
 // utils
@@ -47,6 +47,7 @@ const PlaybackControls : FC<Layer> = ({$layer}) => {
     const isPlaying = useSelector(selectIsPlaying)
     const length = useSelector(selectDuration)
     const currentTimeValue = useSelector(selectCurrentTimeValue)
+    const skipLength = useSelector(selectSkipLength)
     const [prevStart, nextStart] = useSelector(selectClosestRedionsStarts)
     
     return (
@@ -58,17 +59,17 @@ const PlaybackControls : FC<Layer> = ({$layer}) => {
             />
             <Button
                 $layer={$layer}
-                onClick={() => dispatch(skipBy({value: -3, changedBy: "controlsButton"}))}
+                onClick={() => dispatch(skipBy({value: -skipLength, changedBy: "controlsButton"}))}
                 icon={<FastRewindRoundedIcon />}
-            >-3</Button>
+            >-{skipLength}</Button>
             {isPlaying
                 ? <Button $layer={$layer} onClick={() => dispatch(pause())} icon={<PauseRoundedIcon />} />
                 : <Button $layer={$layer} onClick={() => dispatch(play())} icon={<PlayArrowRoundedIcon />} />}
             <Button
                 $layer={$layer}
-                onClick={() => dispatch(skipBy({value: 3, changedBy: "controlsButton"}))}
+                onClick={() => dispatch(skipBy({value: skipLength, changedBy: "controlsButton"}))}
                 icon={<FastForwardRoundedIcon />}
-            >+3</Button>
+            >+{skipLength}</Button>
             <Button
                 $layer={$layer}
                 onClick={() => dispatch(setTime({value: nextStart, changedBy: "controlsButton"}))}
