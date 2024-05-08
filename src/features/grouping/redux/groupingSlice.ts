@@ -142,7 +142,8 @@ export const groupingSlice = createSlice({
                 removeGroupFromSegmentMapping(state.startSegment2Group, segmentID, start)
                 if (idx < segmentKeys.length - 1 && !ends?.includes(start)){ // use next segment as start
                     const nextSegmentID = segmentKeys[idx+1]
-                    state.groups.entities[start].startSegmentID = nextSegmentID
+                    if (state.groups.entities[start])
+                        state.groups.entities[start].startSegmentID = nextSegmentID
                     addGroupToSegmentMapping(state.startSegment2Group, nextSegmentID, start)
                 } else { // delete single segment group
                     removeGroupFromSegmentMapping(state.endSegment2Group, segmentID, start)
