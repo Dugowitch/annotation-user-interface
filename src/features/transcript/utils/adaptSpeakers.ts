@@ -7,15 +7,16 @@ export const adaptSpeakers = (speaker_tags: SpeakerTag[]|null|undefined) => {
         return []
 
     const transformedSpeakers: SpeakerTag[] = []
-    let possible_keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
-    for (const [index, tag] of speaker_tags.entries()){
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let possible_keys = alphabet.split("")
+    for (const [_, tag] of speaker_tags.entries()){
         if (!tag.label)
             continue
 
         possible_keys = possible_keys.filter(k => k !== tag.id)
         
         if (!tag.color){
-            tag.color = speakerColors[index % speakerColors.length]
+            tag.color = speakerColors[alphabet.indexOf(tag.id) % speakerColors.length]
         }
         transformedSpeakers.push(tag)
     }
@@ -23,7 +24,7 @@ export const adaptSpeakers = (speaker_tags: SpeakerTag[]|null|undefined) => {
     transformedSpeakers.push({
         id: possible_keys[0],
         label: "",
-        color: speakerColors[transformedSpeakers.length % speakerColors.length],
+        color: speakerColors[alphabet.indexOf(possible_keys[0]) % speakerColors.length],
     })
     
     return transformedSpeakers

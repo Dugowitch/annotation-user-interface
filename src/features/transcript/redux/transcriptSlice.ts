@@ -161,7 +161,8 @@ export const transcriptSlice = createSlice({
             if (!shouldAddEmpty)
                 return
 
-            let key_arr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            let key_arr = alphabet.split("")
             state.speakerTags.forEach(tag => key_arr = key_arr.filter(k => k !== tag.id))
             
             // if a key is available, add an empty speaker
@@ -171,7 +172,7 @@ export const transcriptSlice = createSlice({
             const emptySpeaker = {
                 id: key_arr[0],
                 label: "",
-                color: speakerColors[state.speakerTags.length % speakerColors.length],
+                color: speakerColors[alphabet.indexOf(key_arr[0]) % speakerColors.length],
             }
             state.speakerTags.push(emptySpeaker)
         },
