@@ -18,6 +18,7 @@ import { deleteSpeaker, updateSpeaker } from "../redux/transcriptSlice"
 
 interface EditableSpeakerProps extends Layer {
     speaker: SpeakerTag,
+    deleteCallback: () => void,
 }
 
 const LabelInput = styled.input<Layer>` ${({theme, $layer}) => css`
@@ -39,7 +40,7 @@ const LabelInput = styled.input<Layer>` ${({theme, $layer}) => css`
     }
 `}`
 
-const EditableSpeaker: FC<EditableSpeakerProps> = ({speaker, $layer}) => {
+const EditableSpeaker: FC<EditableSpeakerProps> = ({speaker, $layer, deleteCallback}) => {
     const dispatch = useAppDispatch()
     const [label, setLabel] = useState(speaker.label)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -56,6 +57,7 @@ const EditableSpeaker: FC<EditableSpeakerProps> = ({speaker, $layer}) => {
         if (label.length !== 0){
             dispatch(updateSpeaker({...speaker, label: label.trim()}))
         } else {
+            deleteCallback()
             dispatch(deleteSpeaker(speaker.id))
         }
     }

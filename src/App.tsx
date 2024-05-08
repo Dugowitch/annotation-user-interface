@@ -79,7 +79,7 @@ function App() {
             <Waveform waveformRegionsRef={waveformRegionsRef} className="waveform" $layer={1}/>
             <Controls className="controls" $layer={1}/>
             <SideBar>
-                <SpeakerList $layer={1} />
+                <SpeakerList waveformRegionsRef={waveformRegionsRef} $layer={1} />
                 <SpecialChars $layer={1} />
             </SideBar>
             <SegmentList className="segments" waveformRegionsRef={waveformRegionsRef} $layer={1}/>

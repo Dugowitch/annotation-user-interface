@@ -3,7 +3,7 @@ import { useEffect } from "react";
 // redux
 import { useAppDispatch } from "../../../redux/hooks";
 import { useSelector } from "react-redux";
-import { createSegment, mapRegion2Segment, selectSegments, updateSegment } from "../../transcript/redux/transcriptSlice";
+import { createSegment, mapRegion2Segment, selectSegments, selectSpeakers, updateSegment } from "../../transcript/redux/transcriptSlice";
 import { selectSpeaker2Color } from "../../transcript/redux/transcriptSlice";
 
 // wavesurfer
@@ -19,6 +19,7 @@ const useLoadRegions = (wavesurfer: React.MutableRefObject<WaveSurfer | null>,
                         waveformRegionsRef: React.MutableRefObject<RegionsPlugin>) => {
     const dispatch = useAppDispatch()
     const segments = useSelector(selectSegments)
+    const speaekrs = useSelector(selectSpeakers)
     const speaker2color = useSelector(selectSpeaker2Color)
 
     useEffect(() => {
@@ -69,7 +70,7 @@ const useLoadRegions = (wavesurfer: React.MutableRefObject<WaveSurfer | null>,
         ]
 
         return () => subscriptions.forEach(unsub => unsub())
-    }, [wavesurfer, segments, waveformRegionsRef.current])
+    }, [wavesurfer, segments, speaekrs, waveformRegionsRef.current])
 }
 
 export default useLoadRegions

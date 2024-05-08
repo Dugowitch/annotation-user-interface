@@ -13,7 +13,12 @@ import { selectSpeakers } from "../redux/transcriptSlice"
 
 // types
 import Layer from "../../../types/Layer"
+import RegionsPlugin from "wavesurfer.js/dist/plugins/regions.js"
 
+
+interface SpeakerListProps extends Layer {
+    waveformRegionsRef: React.MutableRefObject<RegionsPlugin>,
+}
 
 const SpeakerListBody = styled.div`
     display: flex;
@@ -21,13 +26,19 @@ const SpeakerListBody = styled.div`
     gap: 4px;
 `
 
-const SpeakerList: FC<Layer> = ({$layer}) => {
+const SpeakerList: FC<SpeakerListProps> = ({$layer, waveformRegionsRef}) => {
     const speakers = useSelector(selectSpeakers)
 
     return (
         <NamedContainer name="Mluvčí" $layer={$layer}>
             <SpeakerListBody className="body">
-                {speakers.map(speaker => <EditableSpeaker key={speaker.id} $layer={$layer} speaker={speaker} />)}
+                {speakers.map(speaker =>
+                    <EditableSpeaker
+                        key={speaker.id}
+                        $layer={$layer}
+                        speaker={speaker}
+                        deleteCallback={() => waveformRegionsRef.current.clearRegions()}
+                    />)}
             </SpeakerListBody>
         </NamedContainer>
     )
